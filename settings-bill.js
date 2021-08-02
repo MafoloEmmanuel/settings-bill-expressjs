@@ -90,7 +90,7 @@ module.exports = function SettingsBill() {
 
     function totals() {
         let smsTotal = getTotal('sms')
-        let callTotal = getTotal('call')
+        let callTotal  = getTotal('call')
         return {
             smsTotal,
             callTotal,
