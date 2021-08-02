@@ -85,9 +85,11 @@ module.exports = function SettingsBill() {
     }
 
     function grandTotal() {
-        return getTotal('sms') + getTotal('call');
+        let grandTotal = getTotal('sms') + getTotal('call');
+        return grandTotal;
+        
     }
-
+/*
     function totals() {
         let smsTotal = getTotal('sms')
         let callTotal  = getTotal('call')
@@ -96,8 +98,33 @@ module.exports = function SettingsBill() {
             callTotal,
             grandTotal : grandTotal()
         }
-    }
+    }*/
+    function getCallTotal(){
+        let callTotal = getTotal('call');
+        if(!hasReachedCriticalLevel()){
+            callTotal; 
+        }
+        return callTotal; 
 
+           }
+    function getSmsTotal(){
+        let smsTotal = getTotal('sms');
+        if(!hasReachedCriticalLevel()){
+         smsTotal;
+        }
+        return smsTotal;
+
+    }
+    function totalClassName(){
+        const total = grandTotal();
+        console.log(total)
+         if(total >= criticalLevel){
+          return "danger";
+        } else if(total >= warningLevel){
+          return "warning";
+        } 
+       
+      }
     function hasReachedWarningLevel(){
         const total = grandTotal();
         const reachedWarningLevel = total >= warningLevel 
@@ -107,17 +134,19 @@ module.exports = function SettingsBill() {
     }
 
     function hasReachedCriticalLevel(){
-        const total = grandTotal();
-        return total >= criticalLevel;
+        return grandTotal()>= criticalLevel;
     }
-
     return {
         setSettings,
         getSettings,
         recordAction,
         actions,
         actionsFor,
-        totals,
+        //totals,
+        grandTotal,
+        getCallTotal,
+        getSmsTotal,
+        totalClassName,
         hasReachedWarningLevel,
         hasReachedCriticalLevel
     }
