@@ -14,8 +14,7 @@ module.exports = function SettingsBill() {
         criticalLevel = settings.criticalLevel;
     }
 
-    function getSettings
-    () {
+    function getSettings() {
         return {
             smsCost,
             callCost,
@@ -39,6 +38,7 @@ module.exports = function SettingsBill() {
             cost,
             timestamp: new Date()
         });
+       // console.log(actionList)
     }
 
     function actions(){
@@ -65,6 +65,7 @@ module.exports = function SettingsBill() {
 
     function getTotal(type) {
         let total = 0;
+        
         // loop through all the entries in the action list 
         for (let index = 0; index < actionList.length; index++) {
             const action = actionList[index];
@@ -86,7 +87,7 @@ module.exports = function SettingsBill() {
 
     function grandTotal() {
         let grandTotal = getTotal('sms') + getTotal('call');
-        return grandTotal;
+        return grandTotal.toFixed(2);
         
     }
 /*
