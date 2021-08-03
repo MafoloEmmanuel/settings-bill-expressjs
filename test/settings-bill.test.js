@@ -43,21 +43,26 @@ describe("Testing Settings Bill with ExpressJs", function(){
         });
         it('should calculate the total for three calls and three sms', function(){
             settingsBill.setSettings({
-                callCost: 3.89,
-                smsCost: 2.25,
+                callCost: 5.00,
+                smsCost: 2.50,
                 warningLevel: 15,
                 criticalLevel: 25
             });
             settingsBill.recordAction('call');
-            settingsBill.recordAction('sms');
+            settingsBill.recordAction('call');
             settingsBill.recordAction('call');
             settingsBill.recordAction('sms');
-            settingsBill.recordAction('call');
             settingsBill.recordAction('sms');
+            settingsBill.recordAction('sms');
+            settingsBill.recordAction('call');
+            settingsBill.recordAction('call');
 
-            assert.equal(15.56, settingsBill.getCallTotal());
-            assert.equal(9.00, settingsBill.getSmsTotal());
-            assert.equal(24.56, settingsBill.grandTotal());
+
+        
+
+            assert.equal(15.00, settingsBill.getCallTotal());
+            assert.equal(7.50, settingsBill.getSmsTotal());
+            assert.equal(22.50, settingsBill.grandTotal());
         })
     })
     describe("Show the warning and critical levels", function(){
