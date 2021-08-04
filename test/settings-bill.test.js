@@ -1,87 +1,71 @@
 const assert = require('assert');
 const SettingsBill = require('../settings-bill');
 
-describe("Testing Settings Bill with ExpressJs", function(){
-    const settingsBill = SettingsBill();
-    
-    describe("Set the values", function(){
-        it('Should be able to set the value of the call cost', function(){
-            settingsBill.setSettings( {
-            callCost: 2.50 ,
-            smsCost: 0.50,
-            warningLevel: 10,   
-            criticalLevel: 20
-            })
-            assert.deepEqual({
-                callCost: 2.50 ,
-                smsCost: 0.50,
-                warningLevel: 10,   
-                criticalLevel: 20 
-            }, settingsBill.getSettings())
-        })
-
-    })
-
-    describe("Show the overall totals of calls and smses" , function(){
-        it('should calculate the total for one call and one sms', function(){
-            settingsBill.setSettings({
-                callCost: 3.89,
-                smsCost: 2.25,
-                warningLevel: 15,
-                criticalLevel: 25
-            });
-            settingsBill.recordAction('call');
-            settingsBill.recordAction('sms');
-
-            assert.equal(3.89, settingsBill.getCallTotal());
-            assert.equal(2.25, settingsBill.getSmsTotal());
-            assert.equal(6.14, settingsBill.grandTotal());
-
-
-
-
-        });
-        it('should calculate the total for three calls and three sms', function(){
-            settingsBill.setSettings({
+describe('Testing Settings Bill with ExpressJS', function(){
+    let theSettingsBill = SettingsBill();
+    it("Should be able to set the settings", function(){
+        theSettingsBill.setSettings(
+            {
                 callCost: 5.00,
-                smsCost: 2.50,
-                warningLevel: 15,
-                criticalLevel: 25
+                smsCost: 2.00,
+                warningLevel: 10,
+                criticalLevel: 15
             });
-            settingsBill.recordAction('call');
-            settingsBill.recordAction('call');
-            settingsBill.recordAction('call');
-            settingsBill.recordAction('sms');
-            settingsBill.recordAction('sms');
-            settingsBill.recordAction('sms');
-            settingsBill.recordAction('call');
-            settingsBill.recordAction('call');
-
-
-        
-
-            assert.equal(15.00, settingsBill.getCallTotal());
-            assert.equal(7.50, settingsBill.getSmsTotal());
-            assert.equal(22.50, settingsBill.grandTotal());
-        })
-    })
-    describe("Show the warning and critical levels", function(){
-        it('Show the total in orange when a warning level is reached', function(){
-            settingsBill.setSettings({
-                callCost: 10.50,
-                smsCost: 5.50,
-                warningLevel: 20,
-                criticalLevel: 40
+            assert.deepEqual({
+                callCost: 5.00,
+                smsCost: 2.00,
+                warningLevel: 10,
+                criticalLevel: 15
+            }, theSettingsBill.getSettings()
+            )
+    });
+    it('Should be able to add a total for only one call', function(){
+        theSettingsBill.setSettings(
+            {
+                callCost: 5.00,
+                smsCost: 2.00,
+                warningLevel: 10,
+                criticalLevel: 15
             });
-            settingsBill.recordAction('call');
-            settingsBill.recordAction('call');
-            settingsBill.recordAction('sms');
-           
+            theSettingsBill.recordAction('call');
 
-            assert.equal(36.56, settingsBill.getCallTotal());
-            assert.equal(14.5, settingsBill.getSmsTotal());
-            assert.equal(51.06, settingsBill.grandTotal());
-        })
-        
-    })
+            assert.equal(5.00, theSettingsBill.getCallTotal());
+            assert.equal(0.00, theSettingsBill.getSmsTotal());
+
+            assert.equal(5.00, theSettingsBill.grandTotal());
+
+    });
+    it('Should be able to show a total for adding one sms and one call', function(){
+        theSettingsBill.setSettings(
+            {
+                callCost: 5.00,
+                smsCost: 2.00,
+                warningLevel: 10,
+                criticalLevel: 15
+            });
+            theSettingsBill.recordAction('sms');
+
+            assert.equal(5.00, theSettingsBill.getCallTotal());
+            assert.equal(2.00, theSettingsBill.getSmsTotal());
+
+            assert.equal(7.00, theSettingsBill.grandTotal());
+
+    });
+    it('Should be able to add a total for three calls and two smses', function(){
+        theSettingsBill.setSettings(
+            {
+                callCost: 5.00,
+                smsCost: 2.00,
+                warningLevel: 10,
+                criticalLevel: 15
+            });
+            theSettingsBill.recordAction('call');
+            theSettingsBill.recordAction('call');
+            theSettingsBill.recordAction('sms');
+
+            assert.equal(15.00, theSettingsBill.getCallTotal());
+            assert.equal(4.00, theSettingsBill.getSmsTotal());
+            assert.equal(19.00, theSettingsBill.grandTotal());
+
+    });
 })
