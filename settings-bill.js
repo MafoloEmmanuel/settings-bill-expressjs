@@ -38,7 +38,7 @@ module.exports = function SettingsBill() {
             cost,
             timestamp: new Date()
         });
-       // console.log(actionList)
+        console.log(actionList)
     }
 
     function actions(){
@@ -87,7 +87,7 @@ module.exports = function SettingsBill() {
 
     function grandTotal() {
         let grandTotal = getTotal('sms') + getTotal('call');
-        return grandTotal.toFixed(2);
+        return grandTotal;
         
     }
 /*
