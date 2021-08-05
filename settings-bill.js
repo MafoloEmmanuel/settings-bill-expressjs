@@ -1,4 +1,3 @@
-var moment = require('moment')
 module.exports = function SettingsBill() {
 
     let smsCost;
@@ -27,7 +26,7 @@ module.exports = function SettingsBill() {
     }
 
     function recordAction(action) {
-
+        if(!hasReachedCriticalLevel()){
         let cost = 0;
         if (action === 'sms') {
             cost = smsCost;
@@ -35,15 +34,18 @@ module.exports = function SettingsBill() {
         else if (action === 'call') {
             cost = callCost;
         }
-    
+        
         actionList.push({
             type: action,
             cost,
-            timestamp: moment(new Date).fromNow() //add a range 
+            timestamp: new Date()//add a range 
+        
+            
         });
+    
        // console.log(actionList)
     
-   
+    } 
     }
     /*
     function stopTotal(actionMade){
@@ -102,18 +104,6 @@ module.exports = function SettingsBill() {
         //     return total + val;
         // }, 0);
     }
-
-
-    /*
-        function totals() {
-            let smsTotal = getTotal('sms')
-            let callTotal  = getTotal('call')
-            return {
-                smsTotal,
-                callTotal,
-                grandTotal : grandTotal()
-            }
-        }*/
     function getCallTotal() {
         
         callTotal = getTotal('call');
@@ -126,10 +116,11 @@ module.exports = function SettingsBill() {
         
     }
     function grandTotal() {
+       
         let grandTotal = getTotal('sms') + getTotal('call');
+    
         return grandTotal
         
-
     }
     function totalClassName() {
         const total = grandTotal();

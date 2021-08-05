@@ -2,6 +2,8 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const SettingsBill = require('./settings-bill');
+var moment = require('moment');
+moment().format()
 
 const settingsBill = SettingsBill(); 
 
@@ -58,9 +60,16 @@ app.post('/action', function (req, res) {
 
 //
 app.get('/actions', function (req, res) {
+
+    let actionList = settingsBill.actions()
+    actionList.forEach(element =>{
+    element.currentTime = moment(element.timestamp).fromNow();
+    })
+
     res.render('actions', {
 
-        actions: settingsBill.actions()
+        actions: actionList
+        
     })
 })
 // 
