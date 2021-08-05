@@ -42,6 +42,8 @@ module.exports = function SettingsBill() {
     }
 
     function actions(){
+       //console.log(actionList)
+
         return actionList;
     }
 
@@ -118,7 +120,7 @@ module.exports = function SettingsBill() {
     }
     function totalClassName(){
         const total = grandTotal();
-        console.log(total)
+        //console.log(total)
          if(total >= criticalLevel){
           return "danger";
         } else if(total >= warningLevel){

@@ -68,4 +68,40 @@ describe('Testing Settings Bill with ExpressJS', function(){
             assert.equal(19.00, theSettingsBill.grandTotal());
 
     });
-})
+    describe('Change colors for the warning and critical levels', function(){
+        it('Overall total color should be orange when a warning level is reached', function(){
+            theSettingsBill.setSettings(
+                {
+                    callCost: 5.00,
+                    smsCost: 2.00,
+                    warningLevel: 20,
+                    criticalLevel: 30
+                });
+                theSettingsBill.recordAction('call');
+                theSettingsBill.recordAction('sms');
+    
+                assert.equal(20.00, theSettingsBill.getCallTotal());
+                assert.equal(6.00, theSettingsBill.getSmsTotal());
+                assert.equal(26.00, theSettingsBill.grandTotal());
+                assert.equal('warning', theSettingsBill.totalClassName());
+        });
+    
+    it('Overall total color should be red when a critical level is reached', function(){
+        theSettingsBill.setSettings(
+            {
+                callCost: 5.00,
+                smsCost: 2.00,
+                warningLevel: 20,
+                criticalLevel: 30
+            });
+            theSettingsBill.recordAction('call');
+            theSettingsBill.recordAction('sms');
+
+            assert.equal(25.00, theSettingsBill.getCallTotal());
+            assert.equal(8.00, theSettingsBill.getSmsTotal());
+            assert.equal(33.00, theSettingsBill.grandTotal());
+            assert.equal('danger', theSettingsBill.totalClassName());
+    });
+
+});
+});
