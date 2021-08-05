@@ -2,10 +2,8 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const SettingsBill = require('./settings-bill');
-//const moment = require('moment');
 
-const settingsBill = SettingsBill(moment); 
-//moment().format()
+const settingsBill = SettingsBill(); 
 
 const app = express();
 const handlebarSetup = exphbs({
@@ -53,9 +51,7 @@ app.post('/settings', function (req, res) {
 app.post('/action', function (req, res) {
     //capture the call/sms type to add  
     //we get that from the form and put names on the radio buttons 
-    console.log(req.body.actionType)
-    settingsBill.stopTotal(req.body.actionType);
-    console.log(settingsBill.stopTotal(req.body.actionType))
+    //console.log(req.body.actionType)
     settingsBill.recordAction(req.body.actionType);
     res.redirect('/')
 })
