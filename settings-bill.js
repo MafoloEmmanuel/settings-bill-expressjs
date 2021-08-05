@@ -1,4 +1,6 @@
-module.exports = function SettingsBill(moment) {
+
+var moment = require('moment')
+module.exports = function SettingsBill() {
 
     let smsCost;
     let callCost;
@@ -40,7 +42,7 @@ module.exports = function SettingsBill(moment) {
             cost,
             timestamp: moment(new Date).fromNow() //add a range 
         });
-        console.log(actionList)
+       // console.log(actionList)
     
    
     }

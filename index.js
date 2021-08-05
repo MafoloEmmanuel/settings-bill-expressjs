@@ -2,10 +2,10 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const SettingsBill = require('./settings-bill');
-const moment = require('moment');
+//const moment = require('moment');
 
 const settingsBill = SettingsBill(moment); 
-moment().format()
+//moment().format()
 
 const app = express();
 const handlebarSetup = exphbs({
