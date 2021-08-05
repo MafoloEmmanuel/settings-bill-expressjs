@@ -1,8 +1,11 @@
 //setup express
 const express = require('express');
 const exphbs = require('express-handlebars');
-const SettingsBill = require('./settings-bill')
-const settingsBill = SettingsBill();
+const SettingsBill = require('./settings-bill');
+const moment = require('moment');
+
+const settingsBill = SettingsBill(moment); 
+moment().format()
 
 const app = express();
 const handlebarSetup = exphbs({
@@ -24,10 +27,10 @@ app.get('/', function (req, res) {
     res.render('index', {
         settings: settingsBill.getSettings(),
         totals:{
-            callTotal :settingsBill.getCallTotal(),
-            smsTotal: settingsBill.getSmsTotal(),
-            grandTotal: settingsBill.grandTotal(),
-            levels: settingsBill.totalClassName(settingsBill.hasReachedCriticalLevel())
+            callTotal :settingsBill.getCallTotal().toFixed(2),
+            smsTotal: settingsBill.getSmsTotal().toFixed(2),
+            grandTotal: settingsBill.grandTotal().toFixed(2),
+            levels: settingsBill.totalClassName()
         }
 
     })
@@ -48,10 +51,11 @@ app.post('/settings', function (req, res) {
 
 //used to capture values selected in the form
 app.post('/action', function (req, res) {
-    //capture the call type to add  
+    //capture the call/sms type to add  
     //we get that from the form and put names on the radio buttons 
     console.log(req.body.actionType)
-
+    settingsBill.stopTotal(req.body.actionType);
+    console.log(settingsBill.stopTotal(req.body.actionType))
     settingsBill.recordAction(req.body.actionType);
     res.redirect('/')
 })
@@ -59,6 +63,7 @@ app.post('/action', function (req, res) {
 //
 app.get('/actions', function (req, res) {
     res.render('actions', {
+
         actions: settingsBill.actions()
     })
 })

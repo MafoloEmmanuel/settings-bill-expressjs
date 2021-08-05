@@ -1,9 +1,11 @@
-module.exports = function SettingsBill() {
+module.exports = function SettingsBill(moment) {
 
     let smsCost;
     let callCost;
     let warningLevel;
-    let criticalLevel; 
+    let criticalLevel;
+    let callTotal=0;
+    let smsTotal=0
 
     let actionList = [];
 
@@ -26,28 +28,41 @@ module.exports = function SettingsBill() {
     function recordAction(action) {
 
         let cost = 0;
-        if (action === 'sms'){
+        if (action === 'sms') {
             cost = smsCost;
         }
-        else if (action === 'call'){
+        else if (action === 'call') {
             cost = callCost;
         }
-
+    
         actionList.push({
             type: action,
             cost,
-            timestamp: new Date()
+            timestamp: moment(new Date).fromNow() //add a range 
         });
-       // console.log(actionList)
+        console.log(actionList)
+    
+   
     }
-
-    function actions(){
-       //console.log(actionList)
+    /*
+    function stopTotal(actionMade){
+         if(!criticalLevel>=grandTotal()){
+            if(actionMade== 'call'){
+                callTotal += callCost;
+            }
+            else if(actionMade== 'sms'){
+                smsTotal += smsCost;
+            }
+         }
+         
+    }*/
+    function actions() {
+        //console.log(actionList)
 
         return actionList;
     }
 
-    function actionsFor(type){
+    function actionsFor(type) {
         const filteredActions = [];
 
         // loop through all the entries in the action list 
@@ -67,7 +82,7 @@ module.exports = function SettingsBill() {
 
     function getTotal(type) {
         let total = 0;
-        
+
         // loop through all the entries in the action list 
         for (let index = 0; index < actionList.length; index++) {
             const action = actionList[index];
@@ -87,63 +102,61 @@ module.exports = function SettingsBill() {
         // }, 0);
     }
 
-    function grandTotal() {
-        let grandTotal = getTotal('sms') + getTotal('call');
-        return grandTotal;
+
+    /*
+        function totals() {
+            let smsTotal = getTotal('sms')
+            let callTotal  = getTotal('call')
+            return {
+                smsTotal,
+                callTotal,
+                grandTotal : grandTotal()
+            }
+        }*/
+    function getCallTotal() {
+        
+        callTotal = getTotal('call');
+        return callTotal
+    }
+    function getSmsTotal() {
+        smsTotal = getTotal('sms');
+       
+            return smsTotal
         
     }
-/*
-    function totals() {
-        let smsTotal = getTotal('sms')
-        let callTotal  = getTotal('call')
-        return {
-            smsTotal,
-            callTotal,
-            grandTotal : grandTotal()
-        }
-    }*/
-    function getCallTotal(){
-        let callTotal = getTotal('call');
-        if(!hasReachedCriticalLevel()){
-            callTotal; 
-        }
-        return callTotal; 
-
-           }
-    function getSmsTotal(){
-        let smsTotal = getTotal('sms');
-        if(!hasReachedCriticalLevel()){
-         smsTotal;
-        }
-        return smsTotal;
+    function grandTotal() {
+        let grandTotal = getTotal('sms') + getTotal('call');
+        return grandTotal
+        
 
     }
-    function totalClassName(){
+    function totalClassName() {
         const total = grandTotal();
         //console.log(total)
-         if(total >= criticalLevel){
-          return "danger";
-        } else if(total >= warningLevel){
-          return "warning";
-        } 
-       
-      }
-    function hasReachedWarningLevel(){
+        if (total >= criticalLevel) {
+            return "danger";
+        } else if (total >= warningLevel) {
+            return "warning";
+        }
+
+    }
+    function hasReachedWarningLevel() {
         const total = grandTotal();
-        const reachedWarningLevel = total >= warningLevel 
+        const reachedWarningLevel = total >= warningLevel
             && total < criticalLevel;
 
         return reachedWarningLevel;
     }
 
-    function hasReachedCriticalLevel(){
-        return grandTotal()>= criticalLevel;
+    function hasReachedCriticalLevel() {
+        return grandTotal() >= criticalLevel;
     }
     return {
         setSettings,
         getSettings,
         recordAction,
         actions,
+       // stopTotal,
         actionsFor,
         //totals,
         grandTotal,
