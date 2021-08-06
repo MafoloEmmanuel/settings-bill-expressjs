@@ -62,21 +62,23 @@ app.post('/action', function (req, res) {
 app.get('/actions', function (req, res) {
 
     let actionList = settingsBill.actions()
-    actionList.forEach(element =>{
+    actionList.forEach(element => {
     element.currentTime = moment(element.timestamp).fromNow();
-    })
-
+    })  
     res.render('actions', {
-
         actions: actionList
-        
     })
 })
 // 
 app.get('/actions/:actionType', function (req, res) {
     const actionType = req.params.actionType
+    let actionList = settingsBill.actionsFor()
+    actionList.forEach(element => {
+    element.currentTime = moment(element.timestamp).fromNow();
+    }) 
     res.render('actions', {
         actions: settingsBill.actionsFor(actionType)
+
     })
 })
 const PORT = process.env.PORT || 3011;

@@ -3,7 +3,10 @@ const SettingsBill = require('../settings-bill');
 
 describe('Testing Settings Bill with ExpressJS', function(){
     let theSettingsBill = SettingsBill();
+   
     it("Should be able to set the settings", function(){
+    let theSettingsBill = SettingsBill();
+
         theSettingsBill.setSettings(
             {
                 callCost: 5.00,
@@ -20,6 +23,8 @@ describe('Testing Settings Bill with ExpressJS', function(){
             )
     });
     it('Should be able to add a total for only one call', function(){
+    let theSettingsBill = SettingsBill();
+        
         theSettingsBill.setSettings(
             {
                 callCost: 5.00,
@@ -36,6 +41,9 @@ describe('Testing Settings Bill with ExpressJS', function(){
 
     });
     it('Should be able to show a total for adding one sms and one call', function(){
+        
+    let theSettingsBill = SettingsBill();
+        
         theSettingsBill.setSettings(
             {
                 callCost: 5.00,
@@ -44,6 +52,8 @@ describe('Testing Settings Bill with ExpressJS', function(){
                 criticalLevel: 15
             });
             theSettingsBill.recordAction('sms');
+            theSettingsBill.recordAction('call');
+
 
             assert.equal(5.00, theSettingsBill.getCallTotal());
             assert.equal(2.00, theSettingsBill.getSmsTotal());
@@ -52,24 +62,30 @@ describe('Testing Settings Bill with ExpressJS', function(){
 
     });
     it('Should be able to add a total for three calls and two smses', function(){
-        theSettingsBill.setSettings(
-            {
-                callCost: 5.00,
-                smsCost: 2.00,
-                warningLevel: 10,
-                criticalLevel: 15
+        let theSettingsBill = SettingsBill();
+               
+                theSettingsBill.setSettings(
+                    {
+                        callCost: 5.00,
+                        smsCost: 2.00,
+                        warningLevel: 20,
+                        criticalLevel: 30
+                    });
+                    theSettingsBill.recordAction('call');
+                    theSettingsBill.recordAction('sms');
+                    theSettingsBill.recordAction('call');
+                    theSettingsBill.recordAction('sms');
+                    theSettingsBill.recordAction('call');
+                   
+        
+                    assert.equal(15, theSettingsBill.getCallTotal());
+                    assert.equal(4, theSettingsBill.getSmsTotal());
+                    assert.equal(19, theSettingsBill.grandTotal());
             });
-            theSettingsBill.recordAction('call');
-            theSettingsBill.recordAction('call');
-            theSettingsBill.recordAction('sms');
-
-            assert.equal(15.00, theSettingsBill.getCallTotal());
-            assert.equal(4.00, theSettingsBill.getSmsTotal());
-            assert.equal(19.00, theSettingsBill.grandTotal());
-
-    });
     describe('Change colors for the warning and critical levels', function(){
         it('Overall total color should be orange when a warning level is reached', function(){
+    let theSettingsBill = SettingsBill();
+           
             theSettingsBill.setSettings(
                 {
                     callCost: 5.00,
@@ -79,14 +95,22 @@ describe('Testing Settings Bill with ExpressJS', function(){
                 });
                 theSettingsBill.recordAction('call');
                 theSettingsBill.recordAction('sms');
+                theSettingsBill.recordAction('call');
+                theSettingsBill.recordAction('sms');
+                theSettingsBill.recordAction('call');
+                theSettingsBill.recordAction('sms');
+                theSettingsBill.recordAction('call');
+                theSettingsBill.recordAction('sms');
     
-                assert.equal(20.00, theSettingsBill.getCallTotal());
-                assert.equal(6.00, theSettingsBill.getSmsTotal());
-                assert.equal(26.00, theSettingsBill.grandTotal());
+                assert.equal(20, theSettingsBill.getCallTotal());
+                assert.equal(8, theSettingsBill.getSmsTotal());
+                assert.equal(28, theSettingsBill.grandTotal());
                 assert.equal('warning', theSettingsBill.totalClassName());
         });
     
     it('Overall total color should be red when a critical level is reached', function(){
+    let theSettingsBill = SettingsBill();
+       
         theSettingsBill.setSettings(
             {
                 callCost: 5.00,
@@ -96,6 +120,13 @@ describe('Testing Settings Bill with ExpressJS', function(){
             });
             theSettingsBill.recordAction('call');
             theSettingsBill.recordAction('sms');
+            theSettingsBill.recordAction('call');
+            theSettingsBill.recordAction('sms');
+            theSettingsBill.recordAction('call');
+            theSettingsBill.recordAction('sms');
+            theSettingsBill.recordAction('call');
+            theSettingsBill.recordAction('sms');
+            theSettingsBill.recordAction('call');
 
             assert.equal(25.00, theSettingsBill.getCallTotal());
             assert.equal(8.00, theSettingsBill.getSmsTotal());

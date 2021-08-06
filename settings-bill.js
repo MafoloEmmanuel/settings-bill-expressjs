@@ -4,8 +4,8 @@ module.exports = function SettingsBill() {
     let callCost;
     let warningLevel;
     let criticalLevel;
-    let callTotal=0;
-    let smsTotal=0
+    let callTotal = 0;
+    let smsTotal = 0
 
     let actionList = [];
 
@@ -26,39 +26,29 @@ module.exports = function SettingsBill() {
     }
 
     function recordAction(action) {
-        if(!hasReachedCriticalLevel()){
-        let cost = 0;
-        if (action === 'sms') {
-            cost = smsCost;
+        if (!hasReachedCriticalLevel()) {
+            let cost = 0;
+            if (action != null && (smsCost > 0 || callCost > 0)) {
+                if (action === 'sms') {
+                    cost = smsCost;
+                }
+                else if (action === 'call') {
+                    cost = callCost;
+                }
+
+                actionList.push({
+                    type: action,
+                    cost,
+                    timestamp: new Date()
+
+
+                });
+            }
+            // console.log(actionList)
+
         }
-        else if (action === 'call') {
-            cost = callCost;
-        }
-        
-        actionList.push({
-            type: action,
-            cost,
-            timestamp: new Date()//add a range 
-        
-            
-        });
-    
-       // console.log(actionList)
-    
-    } 
     }
-    /*
-    function stopTotal(actionMade){
-         if(!criticalLevel>=grandTotal()){
-            if(actionMade== 'call'){
-                callTotal += callCost;
-            }
-            else if(actionMade== 'sms'){
-                smsTotal += smsCost;
-            }
-         }
-         
-    }*/
+  
     function actions() {
         //console.log(actionList)
 
@@ -80,7 +70,6 @@ module.exports = function SettingsBill() {
 
         return filteredActions;
 
-        // return actionList.filter((action) => action.type === type);
     }
 
     function getTotal(type) {
@@ -96,31 +85,24 @@ module.exports = function SettingsBill() {
             }
         }
         return total;
-
-        // the short way using reduce and arrow functions
-
-        // return actionList.reduce((total, action) => { 
-        //     let val = action.type === type ? action.cost : 0;
-        //     return total + val;
-        // }, 0);
     }
     function getCallTotal() {
-        
+
         callTotal = getTotal('call');
         return callTotal
     }
     function getSmsTotal() {
         smsTotal = getTotal('sms');
-       
-            return smsTotal
-        
+
+        return smsTotal
+
     }
     function grandTotal() {
-       
-        let grandTotal = getTotal('sms') + getTotal('call');
-    
+
+        let grandTotal =getSmsTotal()+ getCallTotal()
+
         return grandTotal
-        
+
     }
     function totalClassName() {
         const total = grandTotal();
@@ -148,9 +130,7 @@ module.exports = function SettingsBill() {
         getSettings,
         recordAction,
         actions,
-       // stopTotal,
         actionsFor,
-        //totals,
         grandTotal,
         getCallTotal,
         getSmsTotal,
